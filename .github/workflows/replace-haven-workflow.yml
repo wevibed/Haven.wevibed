@@ -1,0 +1,69 @@
+name: Replace Haven Website with Cenacle Computers
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_replacement:
+        description: 'Type REPLACE to confirm replacing the current site files'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  replace-website:
+    if: ${{ github.event.inputs.confirm_replacement == 'REPLACE' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout current repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Find uploaded Cenacle website ZIP
+        id: findzip
+        shell: bash
+        run: |
+          ZIP="$(find . -maxdepth 2 -type f -iname 'Cenacle-Computers-Website.zip' -print -quit)"
+          if [ -z "$ZIP" ]; then
+            echo "Could not find Cenacle-Computers-Website.zip in the repository root or one folder below."
+            echo "Upload the website ZIP to the repository first, then rerun this workflow."
+            exit 1
+          fi
+          echo "zip=$ZIP" >> "$GITHUB_OUTPUT"
+
+      - name: Extract and replace tracked website files
+        shell: bash
+        env:
+          ZIP_PATH: ${{ steps.findzip.outputs.zip }}
+        run: |
+          mkdir -p /tmp/cenacle-site
+          unzip -q "$ZIP_PATH" -d /tmp/cenacle-site
+
+          # Locate the project root inside the archive.
+          PROJECT_ROOT="$(find /tmp/cenacle-site -name package.json -type f -printf '%h\n' | head -n 1)"
+          if [ -z "$PROJECT_ROOT" ]; then
+            echo "No package.json found in the archive; refusing to replace the repository."
+            exit 1
+          fi
+
+          # Preserve GitHub workflows and repository metadata while replacing app files.
+          rsync -a --delete             --exclude='.git/'             --exclude='.github/'             --exclude='.gitignore'             --exclude='Cenacle-Computers-Website.zip'             "$PROJECT_ROOT/" ./
+
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No file changes detected."
+            exit 0
+          fi
+          git commit -m "Replace website with Cenacle Computers"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+
+      - name: Report completion
+        if: success()
+        run: echo "Replacement workflow completed. Check the repository and Cloudflare Pages deployment."
