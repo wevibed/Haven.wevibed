@@ -11,7 +11,7 @@ export default function Contact() {
 
   const submit = (e) => {
     e.preventDefault();
-    const msg = `Hi Digital Haven! My name is ${form.name}${form.email ? ` (${form.email})` : ""}. ${form.message}`;
+    const msg = `Hello Cenacle Computers! My name is ${form.name}${form.email ? ` (${form.email})` : ""}. ${form.message}`;
     window.open(whatsappLink(msg), "_blank");
     setSent(true);
   };
@@ -33,7 +33,7 @@ export default function Contact() {
       <PageHeader
         label="Get in Touch"
         title="Contact"
-        subtitle="Questions about a product, price, delivery, or a visit? Send a message — we usually reply the same day on WhatsApp."
+        subtitle="Questions about a product, repair, price or visiting our shop at Eastgate Market? Send us a message on WhatsApp."
       />
       <section className="max-w-[1400px] mx-auto px-5 md:px-10 pb-20 md:pb-28">
         <div className="grid md:grid-cols-2 gap-10 md:gap-16">
@@ -67,8 +67,8 @@ export default function Contact() {
             </div>
             <div className="relative aspect-[4/3] bg-stone overflow-hidden grayscale mt-2">
               <iframe
-                title="Digital Haven location"
-                src="https://www.google.com/maps?q=Eastgate+Centre+Harare&output=embed"
+                title="Cenacle Computers location"
+                src="https://www.google.com/maps?q=Eastgate+Market+Harare+Zimbabwe&output=embed"
                 className="w-full h-full border-0"
                 loading="lazy"
               />

@@ -31,7 +31,7 @@ export default function Header() {
   return (
     <>
       <div className="w-full bg-tech-navy text-white text-center py-2 px-3 text-[9px] md:text-[10px] tracking-[0.14em] uppercase">
-        Fast Delivery in Harare & Surrounding Areas <span className="mx-2 opacity-40">|</span> Message Us on WhatsApp
+        Shop B29 · Eastgate Market, Harare <span className="mx-2 opacity-40">|</span> Sales · Accessories · Repairs
       </div>
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200">
         <div className="max-w-[1400px] mx-auto px-4 md:px-8 h-[74px] grid grid-cols-[1fr_auto_1fr] items-center">
@@ -45,8 +45,8 @@ export default function Header() {
             </nav>
           </div>
           <Link to="/" className="text-center leading-none">
-            <div className="font-bold tracking-[-0.05em] text-xl md:text-2xl text-slate-900">DIGITAL<span className="text-tech-blue">.</span></div>
-            <div className="text-[9px] md:text-[10px] font-bold tracking-[0.28em] text-tech-blue mt-1">HAVEN</div>
+            <div className="font-bold tracking-[-0.05em] text-xl md:text-2xl text-slate-900">CENACLE<span className="text-tech-blue">.</span></div>
+            <div className="text-[9px] md:text-[10px] font-bold tracking-[0.28em] text-tech-blue mt-1">COMPUTERS</div>
           </Link>
           <div className="flex items-center justify-end gap-4">
             <button aria-label="Search" className="hidden md:block"><Search className="w-5 h-5" /></button>
@@ -57,7 +57,7 @@ export default function Header() {
       {open && (
         <div className="fixed inset-0 z-50 bg-white flex flex-col">
           <div className="flex items-center justify-between px-5 h-[74px] border-b border-slate-200">
-            <div className="font-bold tracking-[-0.04em]">DIGITAL<span className="text-tech-blue">.</span> <span className="text-tech-blue text-xs tracking-[0.2em]">HAVEN</span></div>
+            <div className="font-bold tracking-[-0.04em]">CENACLE<span className="text-tech-blue">.</span> <span className="text-tech-blue text-xs tracking-[0.2em]">COMPUTERS</span></div>
             <button onClick={() => setOpen(false)} aria-label="Close menu"><X className="w-6 h-6" /></button>
           </div>
           <nav className="flex flex-col px-6 pt-10 gap-7 text-3xl font-bold">
