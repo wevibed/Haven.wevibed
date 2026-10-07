@@ -1,0 +1,102 @@
+name: Replace Haven with Cenacle Catalogue
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  replace:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Prepare extraction directory
+        run: |
+          rm -rf /tmp/cenacle
+          mkdir -p /tmp/cenacle
+
+      - name: Extract corrected catalogue
+        run: |
+          unzip -q cenacle-computers-corrected.zip -d /tmp/cenacle
+
+      - name: Detect project root
+        run: |
+          echo "Extracted files:"
+          find /tmp/cenacle -maxdepth 2 -type f | head -50
+
+          DIRS=$(find /tmp/cenacle -mindepth 1 -maxdepth 1 -type d | wc -l)
+          FILES=$(find /tmp/cenacle -mindepth 1 -maxdepth 1 -type f | wc -l)
+
+          if [ "$DIRS" -eq 1 ] && [ "$FILES" -eq 0 ]; then
+            ROOT=$(find /tmp/cenacle -mindepth 1 -maxdepth 1 -type d | head -1)
+          else
+            ROOT="/tmp/cenacle"
+          fi
+
+          echo "PROJECT_ROOT=$ROOT" >> "$GITHUB_ENV"
+
+      - name: Backup GitHub workflows
+        run: |
+          rm -rf /tmp/github-workflows
+          mkdir -p /tmp/github-workflows
+
+          if [ -d ".github/workflows" ]; then
+            cp -R .github/workflows /tmp/github-workflows/
+          fi
+
+      - name: Replace project files
+        run: |
+          echo "Replacing current project..."
+
+          find . -mindepth 1 -maxdepth 1 \
+            ! -name ".git" \
+            ! -name ".github" \
+            -exec rm -rf {} +
+
+          cp -R "$PROJECT_ROOT"/. .
+
+      - name: Restore GitHub workflows
+        run: |
+          mkdir -p .github/workflows
+
+          if [ -d "/tmp/github-workflows/workflows" ]; then
+            cp -R /tmp/github-workflows/workflows/. .github/workflows/
+          fi
+
+      - name: Remove ZIP from repository
+        run: |
+          rm -f cenacle-computers-corrected.zip
+
+      - name: Show replacement
+        run: |
+          echo "=== ROOT ==="
+          ls -la
+
+          echo ""
+          echo "=== PRODUCT IMAGES ==="
+          find public/products -type f 2>/dev/null | head -30 || true
+
+      - name: Commit replacement
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add -A
+
+          if git diff --cached --quiet; then
+            echo "No changes detected."
+            exit 0
+          fi
+
+          git commit -m "Replace Haven with corrected Cenacle catalogue"
+
+      - name: Push replacement
+        run: |
+          git push origin HEAD:main
