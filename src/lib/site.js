@@ -16,28 +16,23 @@ export const SITE = {
   mapsUrl: "https://www.google.com/maps/search/?api=1&query=Cenacle+Computers+Shop+B29+Eastgate+Market+Harare+Zimbabwe",
 };
 
+// Real photos of the shop (supplied by the client). Used for banners only — never as product images.
 export const IMAGES = {
-  hero: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=1800&q=85",
-  laptop: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=900&q=82",
-  phone: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=900&q=82",
-  accessories: "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=900&q=82",
-  printer: "https://images.unsplash.com/photo-1612815154858-60aa4c59eaa6?auto=format&fit=crop&w=900&q=82",
-  networking: "https://images.unsplash.com/photo-1606904825846-647eb07f5be2?auto=format&fit=crop&w=900&q=82",
-  components: "https://images.unsplash.com/photo-1591488320449-011701bb6704?auto=format&fit=crop&w=900&q=82",
-  software: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=82",
-  cctv: "https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&w=900&q=82",
-  shop: "/images/cenacle-shop-interior.png",
-  entrance: "/images/cenacle-shop-entrance.png",
+  hero: "/shop/cenacle-shop-entrance.webp",
+  shop: "/shop/cenacle-shop-interior.webp",
+  entrance: "/shop/cenacle-shop-entrance.webp",
 };
 
+// Category tiles use a real product from that category (id), or a real shop photo where the category has no product photo.
 export const CATEGORIES = [
-  { name: "Laptops", image: IMAGES.laptop },
-  { name: "Laptop Accessories", image: IMAGES.accessories },
-  { name: "Cables & Connectivity", image: IMAGES.networking },
-  { name: "Storage & Components", image: IMAGES.components },
-  { name: "Peripherals & Gaming", image: IMAGES.printer },
-  { name: "Smartwatches", image: IMAGES.phone },
-  { name: "Software & Games", image: IMAGES.software },
+  { name: "Laptops", image: "/products/hp-probook-450-g9-1.webp" },
+  { name: "Laptop Accessories", image: "/products/aluminium-laptop-stand-1.webp" },
+  { name: "Cables & Connectivity", image: "/products/hdmi-to-vga-converter-1.webp" },
+  { name: "Storage & Components", image: "/products/second-hdd-caddy-1.webp" },
+  { name: "Peripherals & Gaming", image: "/products/wireless-keyboard-mouse-combo-1.webp" },
+  { name: "Smartwatches", image: "/products/modio-mw28-1.webp" },
+  { name: "Software & Games", image: "/shop/cenacle-shop-interior.webp" },
+  { name: "Repairs & Services", image: "/shop/cenacle-shop-entrance.webp" },
 ];
 
 export function whatsappLink(message = "Hello Cenacle Computers, I'd like to enquire about your products and services.") {
@@ -45,5 +40,6 @@ export function whatsappLink(message = "Hello Cenacle Computers, I'd like to enq
 }
 
 export function productEnquiryLink(product) {
-  return whatsappLink(`Hello Cenacle Computers, I'm interested in ${product.name}${product.price ? ` listed at US$${Number(product.price).toLocaleString("en-US")}` : ""}. Is it available?`);
+  const price = product.price ? ` listed at ${product.priceFrom ? "from " : ""}US$${Number(product.price).toLocaleString("en-US")}` : "";
+  return whatsappLink(`Hello Cenacle Computers, I'm interested in ${product.name}${price}. Is it available?`);
 }

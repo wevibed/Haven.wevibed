@@ -23,7 +23,7 @@ export default function Hero() {
           </div>
         </div>
         <div className="relative min-h-[390px] md:min-h-0 order-1 md:order-2 overflow-hidden bg-slate-900">
-          <Image src={IMAGES.hero} alt="Technology products for home, office and business" fittingType="fill" className="absolute inset-0 w-full h-full object-cover object-center" />
+          <Image src={IMAGES.hero} alt="Cenacle Computers shop front, Shop B29, Eastgate Market" fittingType="fill" className="absolute inset-0 w-full h-full object-cover object-top" fetchPriority="high" loading="eager" />
           <div className="absolute inset-0 bg-gradient-to-t from-tech-navy/50 via-transparent to-transparent" />
         </div>
       </div>

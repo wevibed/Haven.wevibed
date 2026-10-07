@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { MessageCircle, ArrowLeft } from "lucide-react";
-import { Image } from "@/components/ui/image";
-import { Product } from "@/data/products";
+import ProductImage from "@/components/ProductImage";
+import { Product, formatPrice } from "@/data/products";
 import { productEnquiryLink } from "@/lib/site";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -46,7 +46,7 @@ export default function ProductDetail() {
   }
 
   const sold = product.availability === "Sold Out";
-  const images = [product.image_url, product.image_url_2].filter(Boolean);
+  const images = product.images?.length ? product.images : [null];
   const dotColor = sold ? "bg-muted-foreground" : product.availability === "Low Stock" ? "bg-accent" : "bg-foreground";
 
   return (
@@ -61,10 +61,10 @@ export default function ProductDetail() {
         </Link>
 
         <div className="grid md:grid-cols-2 gap-8 md:gap-16">
-          <div className="space-y-3">
+          <div className={images.length > 1 ? "grid grid-cols-2 gap-3" : "max-w-md"}>
             {images.map((src, i) => (
-              <div key={i} className="aspect-[4/5] bg-stone overflow-hidden">
-                <Image src={src} alt={product.name} fittingType="fill" className="w-full h-full object-cover" />
+              <div key={i} className={`aspect-square bg-white overflow-hidden rounded-xl border border-slate-200 ${i === 0 && images.length % 2 === 1 && images.length > 1 ? "col-span-2" : ""}`}>
+                <ProductImage product={product} src={src} alt={images.length > 1 ? `${product.name} ${i + 1}` : product.name} />
               </div>
             ))}
           </div>
@@ -73,7 +73,7 @@ export default function ProductDetail() {
             <div className="text-[11px] tracking-wide-luxe uppercase text-muted-foreground">{product.category}</div>
             <h1 className="font-heading text-4xl md:text-5xl mt-2">{product.name}</h1>
             <div className="mt-4 text-2xl">
-              {product.price ? `$${product.price}` : "Ask for price"} {product.price ? <span className="text-sm text-muted-foreground">{product.currency}</span> : null}
+              {formatPrice(product)}
             </div>
 
             <div className="mt-6 flex items-center gap-2 text-[11px] tracking-wide-luxe uppercase">
